@@ -61,7 +61,7 @@ void draw() {
     drawarray();
     myBall.drawBall();                   // Draws the ball 
     myBall.applyGravity();               // Applies gravity to the ball
-    gameover();                          // Calls the gameover function
+   // gameover();                          // Calls the gameover function
     myBall.keepInScreen();               // Bounces the ball off the game window edges
     paddleCollision();                   // Calls the collision function
     blockCollision();
