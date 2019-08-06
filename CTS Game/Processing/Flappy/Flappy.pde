@@ -2,6 +2,7 @@
 import processing.serial.*;
 
 Serial sp;                               // Serial port object
+Walls walls;
 
 int lf = 10;                             // ASCII linefeed
 String delimiter = " ";                  // String delimiter
@@ -14,7 +15,7 @@ int paddleWidth = 10;
 int paddleHeight = 60;
 float scale = 10;
 
-float gravity = 0.75;                    //Gravity constant
+float gravity = .981;                    //Gravity constant
 float paddlevy = 0; 
 int screenvalue = 0;
 
@@ -48,48 +49,21 @@ void setup() {
   sp.clear();                            // Clear/flush the serial port
   str = sp.readStringUntil(lf);          // Read and discard any malformed data in the serial buffer
   str = null;                            // Clear the string
+  
+  walls = new Walls();
 }
 
 void draw() {
   background(230);                       // Render the background at 90% gray (clears the window)
-  println(screenvalue);
-  if (screenvalue == 0) {
-    startgamescreen();
-  } else if (screenvalue == 1) {
-    playscreen();
-  } else if (screenvalue == 2) {
-    gameoverscreen();
+  //println(screenvalue);
+  //if (screenvalue == 0) {
+  //  startgamescreen();
+  //} else if (screenvalue == 1) {
+  //  playscreen();
+  //} else if (screenvalue == 2) {
+  //  gameoverscreen();
   
-  }
-}
-
-public void mousePressed() {
-  // if we are on the initial screen when clicked, start the game
-  if (screenvalue==0) {
-    
-    gameinit();
-    
-  }
-}
-void startgamescreen() {
-  rect(10,10,10,10);
-  //gameinit();
-}
-
-void gameinit() {
-  //if (press!=0) {
-    screenvalue = 1;
-    playscreen();
   //}
-}
-
-void gameoverscreen() {
-  rect(10,10,10,200);
-} //<>//
-
-
-void playscreen() {
-  rect(40,10,30,20);
   
   while (sp.available() > 0) {           // Read while the serial port contains data
     str = sp.readStringUntil(lf);        // Write the string 
@@ -98,24 +72,62 @@ void playscreen() {
   if (str != null) {                     // If the string is not null ...
     data = float(split(str, delimiter)); // Separate the string by the delimiter
     press = data[5];                     // Save the position as the fourth element of the array
-    applyForces(-0.1*(press-.981));
+    applyForces(-0.25*(.5*press-gravity));
     paddle(paddleY);                     // Draw the paddle in the center of the screen 
-    //makeBounceBottom(height);
-    //makeBounceTop(0);
-    //keepInScreen();
+    keepInScreen();
+    walls.wallAdder();
+    wallHandler();
   }
-} //<>//
+}
+
+//public void mousePressed() {
+//  // if we are on the initial screen when clicked, start the game
+//  if (screenvalue==0) {
+    
+//    gameinit();
+    
+//  }
+//}
+//void startgamescreen() {
+//  rect(10,10,10,10);
+//  //gameinit();
+//}
+
+//void gameinit() {
+//  //if (press!=0) {
+//    screenvalue = 1;
+//    playscreen();
+//  //}
+//}
+
+//void gameoverscreen() {
+//  rect(10,10,10,200);
+//} //<>//
+
+
+//void playscreen() {
+//  rect(40,10,30,20);
+  
+//  while (sp.available() > 0) {           // Read while the serial port contains data
+//    str = sp.readStringUntil(lf);        // Write the string 
+//  }
+
+//  if (str != null) {                     // If the string is not null ...
+//    data = float(split(str, delimiter)); // Separate the string by the delimiter
+//    press = data[5];                     // Save the position as the fourth element of the array
+//    applyForces(-0.1*(press-.981));
+//    paddle(paddleY);                     // Draw the paddle in the center of the screen 
+//    //makeBounceBottom(height);
+//    //makeBounceTop(0);
+//    //keepInScreen();
+//  }
+//} //<>//
 
 // Paddle methods
 void paddle(float press) {
   fill(255,0,125);
   rectMode(CENTER);
   rect(paddleX, press, paddleWidth, paddleHeight, 5);
-}
-
-void paddleGravity() {
-  paddlevy += gravity;
-  paddleY += paddlevy;
 }
 
 void applyForces(float num) {
@@ -126,6 +138,14 @@ void applyForces(float num) {
 //Keeps ball in the screen bounds
 void keepInScreen() {
  if ((paddleY+(paddleHeight/2) > height) || (paddleY-(paddleHeight/2) < 0)){ 
-    screenvalue=2;
+    exit();
+  }
+}
+void wallHandler() {
+  for (int i = 0; i < walls.walls.size(); i++) {
+    walls.wallRemover(i);
+    walls.wallMover(i);
+    walls.wallDrawer(i);
+    walls.watchWallCollision(i, paddleX, paddleY, paddleWidth, paddleHeight);
   }
 }

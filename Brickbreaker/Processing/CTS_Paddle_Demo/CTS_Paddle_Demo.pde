@@ -5,7 +5,6 @@ Serial sp;                               // Serial port object
 Ball myBall;
 Block block;
 
-
 int lf = 10;                             // ASCII linefeed
 String delimiter = " ";                  // String delimiter
 String str;                              // Serial output string
@@ -16,14 +15,6 @@ int paddleY = 400;
 int paddleWidth = 100;
 int paddleHeight = 10;
 float scale = 200.0;
-
-int ballX, ballY;                        //Center coordinates
-int ballSize = 30;                       //Ball radius
-int ballColor = color(255);              //Ball color
-
-float gravity = 0.75;                    //Gravity constant
-float ballvy = 0;                        //Vertical speed
-float ballvx = 0;                        //Horizontal speed 
 
 public int p = 0;
 
@@ -36,18 +27,6 @@ Block[] blocks;
  * Message format: "{tau_A} {tau_B} {highpass_A} {highpass_B} {position} {pressure}\n"
  *                  data[0] data[1]   data[2]      data[3]      data[4]   data[5]
  *    Space-delimited ASCII string Where all values are returned as floats (0.2f)
- */
-
-/*
- * Window axes
- *     0     x->        1000
- *   0 +------------------+
- *     |                  |
- *  y  |                  |
- *  |  |                  |
- *  v  |                  |
- *     |                  |
- * 500 +------------------+
  */
 
 void setup() {
@@ -82,7 +61,7 @@ void draw() {
     drawarray();
     myBall.drawBall();                   // Draws the ball 
     myBall.applyGravity();               // Applies gravity to the ball
-    //gameover();                          // Calls the gameover function
+    gameover();                          // Calls the gameover function
     myBall.keepInScreen();               // Bounces the ball off the game window edges
     paddleCollision();                   // Calls the collision function
     blockCollision();
