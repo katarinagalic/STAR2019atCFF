@@ -55,16 +55,6 @@ void setup() {
 
 void draw() {
   background(230);                       // Render the background at 90% gray (clears the window)
-  //println(screenvalue);
-  //if (screenvalue == 0) {
-  //  startgamescreen();
-  //} else if (screenvalue == 1) {
-  //  playscreen();
-  //} else if (screenvalue == 2) {
-  //  gameoverscreen();
-  
-  //}
-  
   while (sp.available() > 0) {           // Read while the serial port contains data
     str = sp.readStringUntil(lf);        // Write the string 
   }
