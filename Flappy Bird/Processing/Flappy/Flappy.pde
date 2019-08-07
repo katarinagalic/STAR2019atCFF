@@ -68,7 +68,8 @@ void draw() {
   while (sp.available() > 0) {           // Read while the serial port contains data
     str = sp.readStringUntil(lf);        // Write the string 
   }
-
+  
+  try {
   if (str != null) {                     // If the string is not null ...
     data = float(split(str, delimiter)); // Separate the string by the delimiter
     press = data[5];                     // Save the position as the fourth element of the array
@@ -77,55 +78,19 @@ void draw() {
     keepInScreen();
     walls.wallAdder();
     wallHandler();
+    walls.printScore();
+  }
+  } catch (ArrayIndexOutOfBoundsException e) {
+    println("Caught it");
+    draw();
   }
 }
 
-//public void mousePressed() {
-//  // if we are on the initial screen when clicked, start the game
-//  if (screenvalue==0) {
-    
-//    gameinit();
-    
-//  }
-//}
-//void startgamescreen() {
-//  rect(10,10,10,10);
-//  //gameinit();
-//}
-
-//void gameinit() {
-//  //if (press!=0) {
-//    screenvalue = 1;
-//    playscreen();
-//  //}
-//}
-
-//void gameoverscreen() {
-//  rect(10,10,10,200);
-//} //<>//
-
-
-//void playscreen() {
-//  rect(40,10,30,20);
-  
-//  while (sp.available() > 0) {           // Read while the serial port contains data
-//    str = sp.readStringUntil(lf);        // Write the string 
-//  }
-
-//  if (str != null) {                     // If the string is not null ...
-//    data = float(split(str, delimiter)); // Separate the string by the delimiter
-//    press = data[5];                     // Save the position as the fourth element of the array
-//    applyForces(-0.1*(press-.981));
-//    paddle(paddleY);                     // Draw the paddle in the center of the screen 
-//    //makeBounceBottom(height);
-//    //makeBounceTop(0);
-//    //keepInScreen();
-//  }
-//} //<>//
-
+ //<>//
 // Paddle methods
 void paddle(float press) {
-  fill(255,0,125);
+  fill(233,175,68);
+  noStroke();
   rectMode(CENTER);
   rect(paddleX, press, paddleWidth, paddleHeight, 5);
 }
@@ -148,4 +113,8 @@ void wallHandler() {
     walls.wallDrawer(i);
     walls.watchWallCollision(i, paddleX, paddleY, paddleWidth, paddleHeight);
   }
+}
+
+void scoreTracker() {
+  
 }

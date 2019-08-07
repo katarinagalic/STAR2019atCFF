@@ -14,7 +14,7 @@ float paddleX;
 int paddleY = 400;
 int paddleWidth = 100;
 int paddleHeight = 10;
-float scale = 200.0;
+float scale = 250.0;
 
 public int p = 0;
 
@@ -54,6 +54,8 @@ void draw() {
   }
   
   blockarray();
+  
+  try {
   if (str != null) {                     // If the string is not null ...
     data = float(split(str, delimiter)); // Separate the string by the delimiter
     pos = data[4];                       // Save the position as the fourth element of the array
@@ -65,6 +67,10 @@ void draw() {
     myBall.keepInScreen();               // Bounces the ball off the game window edges
     paddleCollision();                   // Calls the collision function
     blockCollision();
+  } 
+  } catch (ArrayIndexOutOfBoundsException e) {
+    println("Caught it");
+    draw();
   }
 }
 

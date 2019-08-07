@@ -3,6 +3,7 @@ class Walls {
 Walls() {
 }
 
+int score = 0;
 int wallSpeed = 5;
 int wallInterval = 1000;
 float lastAddTime = 0;
@@ -20,7 +21,7 @@ void wallAdder() {
     int randHeight = round(random(minGapHeight, maxGapHeight));
     int randY = round(random(0, height-randHeight));
     // {gapWallX, gapWallY, gapWallWidth, gapWallHeight}
-    int[] randWall = {width, randY, wallWidth, randHeight}; 
+    int[] randWall = {width, randY, wallWidth, randHeight, 0}; 
     walls.add(randWall);
     lastAddTime = millis();
   }
@@ -82,6 +83,22 @@ void watchWallCollision(int index, int paddleX, float paddleY, int paddleWidth, 
     ) {
     exit();
   }
+  
+  int wallScored = wall[4];
+  if (paddleX > gapWallX+(gapWallWidth/2) && wallScored==0) {
+    wallScored=1;
+    wall[4]=1;
+    score();
+  }
+}
+void score() {
+  score++;
 }
 
+void printScore(){
+  textAlign(CENTER);
+  fill(233,175,68);
+  textSize(30); 
+  text(score, 50, height/2);
+}
 }
