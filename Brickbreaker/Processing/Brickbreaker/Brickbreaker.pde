@@ -16,6 +16,7 @@ int paddleWidth = 100;
 int paddleHeight = 10;
 float scale = 250.0;
 
+
 public int p = 0;
 
 Block[] blocks;
@@ -30,6 +31,7 @@ Block[] blocks;
  */
 
 void setup() {
+  frameRate(100);
   size(1000, 500); // Set the processing window size
   //fullScreen();
   
@@ -63,10 +65,11 @@ void draw() {
     drawarray();
     myBall.drawBall();                   // Draws the ball 
     myBall.applyGravity();               // Applies gravity to the ball
-   // gameover();                          // Calls the gameover function
+    //gameover();                          // Calls the gameover function
     myBall.keepInScreen();               // Bounces the ball off the game window edges
     paddleCollision();                   // Calls the collision function
     blockCollision();
+    counterfunct();
   } 
   } catch (ArrayIndexOutOfBoundsException e) {
     println("Caught it");
@@ -123,6 +126,25 @@ void blockCollision() {
   }
 }
 
+void counterfunct() {
+  int counter = 0;
+  for (int i=0; i<blocks.length; i++){
+    if (blocks[i].blockVisibility == false) {
+      counter++;
+    }
+  }
+  
+  if (counter == 50) {
+    textAlign(CENTER);
+    fill(233,175,68);
+    textSize(30); 
+    text("Game over", width/2, height/2);
+    noLoop();
+    delay(3000);
+    exit();
+  }
+}
+      
 //Returns the ball back to top if it hits the bottom
 void gameover() {
   if (myBall.ballY + myBall.ballSize/2 > 498){

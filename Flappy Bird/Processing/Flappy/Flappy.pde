@@ -104,7 +104,3 @@ void wallHandler() {
     walls.watchWallCollision(i, paddleX, paddleY, paddleWidth, paddleHeight);
   }
 }
-
-void scoreTracker() {
-  
-}
