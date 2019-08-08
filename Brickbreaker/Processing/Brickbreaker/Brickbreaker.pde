@@ -16,6 +16,7 @@ int paddleWidth = 100;
 int paddleHeight = 10;
 float scale = 250.0;
 
+int lives = 5;
 
 public int p = 0;
 
@@ -65,11 +66,13 @@ void draw() {
     drawarray();
     myBall.drawBall();                   // Draws the ball 
     myBall.applyGravity();               // Applies gravity to the ball
-    //gameover();                          // Calls the gameover function
+    gameover();                          // Calls the gameover function
     myBall.keepInScreen();               // Bounces the ball off the game window edges
     paddleCollision();                   // Calls the collision function
     blockCollision();
-    counterfunct();
+    displayend();
+    printLives();
+    
   } 
   } catch (ArrayIndexOutOfBoundsException e) {
     println("Caught it");
@@ -106,7 +109,7 @@ void paddleCollision(){
   if ((myBall.ballX+(myBall.ballSize/2) > paddleX-(paddleWidth/2)) && (myBall.ballX-(myBall.ballSize/2) < paddleX+(paddleWidth/2))) {
       if (dist(myBall.ballX, myBall.ballY, myBall.ballX, paddleY)<=(myBall.ballSize/2)) {
         myBall.makeBounceBottom(paddleY);
-        myBall.ballvx = (myBall.ballX - paddleX)/10;
+        myBall.ballvx = (myBall.ballX - paddleX)/15;
       }
     }
 }
@@ -115,36 +118,43 @@ void paddleCollision(){
 void blockCollision() {
   for (int i=0; i<blocks.length; i++){
     if (blocks[i].blockVisibility){
-      if ((myBall.ballX+(myBall.ballSize/2) > blocks[i].blockX-(blocks[i].blockWidth)) && (myBall.ballX-(myBall.ballSize/2) < blocks[i].blockX+(blocks[i].blockWidth))) {
-          if (dist(myBall.ballX, myBall.ballY, myBall.ballX, blocks[i].blockY)<=(myBall.ballSize/2)) {
+      if ((myBall.ballX+(myBall.ballSize/2) > blocks[i].blockX) && (myBall.ballX-(myBall.ballSize/2) < blocks[i].blockX+(blocks[i].blockWidth))) {
+          if (dist(myBall.ballX, myBall.ballY, myBall.ballX, blocks[i].blockY)<=(myBall.ballSize)) {
             blocks[i].blockVisibility = false;
             myBall.makeBounceTop(blocks[i].blockY+20);
-            myBall.ballvx = (myBall.ballX - blocks[i].blockX)/10;
+            myBall.ballvx = (myBall.ballX - blocks[i].blockX)/15;
         }
       }
     }
   }
 }
 
-void counterfunct() {
+boolean counterfunct() {
   int counter = 0;
   for (int i=0; i<blocks.length; i++){
     if (blocks[i].blockVisibility == false) {
       counter++;
     }
   }
-  
+
   if (counter == 50) {
+    return (true);
+  } else {
+    return (false);
+  }
+}
+
+void displayend() {
+  if ((counterfunct() == true) || (lives==0)) {
+    myBall.ballVisibility = false;
+    for (int i=0; i<blocks.length; i++){
+      blocks[i].blockVisibility=false;}
     textAlign(CENTER);
     fill(233,175,68);
     textSize(30); 
     text("Game over", width/2, height/2);
-    noLoop();
-    delay(3000);
-    exit();
-  }
+  }  
 }
-      
 //Returns the ball back to top if it hits the bottom
 void gameover() {
   if (myBall.ballY + myBall.ballSize/2 > 498){
@@ -152,5 +162,14 @@ void gameover() {
     myBall.ballY=height/5;
     myBall.ballvy = 0;
     myBall.ballvx = 1;
+    if (lives >= 1) {
+    lives -=1; }
   }
+}
+
+void printLives(){
+  textAlign(CENTER);
+  fill(233,175,68);
+  textSize(30); 
+  text("Lives: "+str(lives), width*0.9, height*0.9);
 }

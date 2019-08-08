@@ -3,13 +3,14 @@
 class Ball {
 
   int ballX, ballY;                        //Center coordinates
-  int ballSize = 30;                       //Ball radius
+  int ballSize = 30;                       //Ball diameter
   int ballColor = color(0);                //Ball color
 
-  float gravity = 0.75;                    //Gravity constant
+  float gravity = 0.65;                    //Gravity constant
   float ballvy = 0;                        //Vertical speed
   float ballvx = 3;                        //Horizontal speed 
 
+  boolean ballVisibility = true;
   //Constructor
   Ball() {
     
@@ -17,13 +18,15 @@ class Ball {
   
   //Draws ball in window
   void drawBall() {
+    if (ballVisibility == true) {
     fill(ballColor);
-    ellipse(ballX, ballY, ballSize, ballSize);  
+    ellipse(ballX, ballY, ballSize, ballSize); 
+    }
   }
 
   //Applies gravity
   void applyGravity() {
-    ballvy += gravity;
+    ballvy += 0.3*gravity;
     ballY += ballvy;
     ballX += ballvx;
   }
