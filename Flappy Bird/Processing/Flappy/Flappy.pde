@@ -63,7 +63,7 @@ void draw() {
   if (str != null) {                     // If the string is not null ...
     data = float(split(str, delimiter)); // Separate the string by the delimiter
     press = data[5];                     // Save the position as the fourth element of the array
-    applyForces(-0.25*(.5*press-gravity));
+    applyForces(-0.2*(.5*press-gravity));
     paddle(paddleY);                     // Draw the paddle in the center of the screen 
     keepInScreen();
     walls.wallAdder();
