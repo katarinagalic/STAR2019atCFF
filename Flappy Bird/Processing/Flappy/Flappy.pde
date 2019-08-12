@@ -8,7 +8,7 @@ int lf = 10;                             // ASCII linefeed
 String delimiter = " ";                  // String delimiter
 String str;                              // Serial output string
 float[] data = new float[6];             // Serial data buffer
-public float press;                               // Paddle position
+public float press;                      // Paddle position
 int paddleX = 500;
 float paddleY = height/2;
 int paddleWidth = 10;
