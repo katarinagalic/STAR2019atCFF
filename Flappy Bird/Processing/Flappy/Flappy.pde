@@ -64,7 +64,7 @@ void draw() {
     data = float(split(str, delimiter)); // Separate the string by the delimiter
     press = data[5];                     // Save the position as the fourth element of the array
     applyForces(-0.2*(.5*press-gravity));
-    paddle(paddleY);                     // Draw the paddle in the center of the screen 
+    drawpaddle(paddleY);                     // Draw the paddle in the center of the screen 
     keepInScreen();
     walls.wallAdder();
     wallHandler();
@@ -78,7 +78,7 @@ void draw() {
 
  //<>//
 // Paddle methods
-void paddle(float press) {
+void drawpaddle(float press) {
   fill(233,175,68);
   noStroke();
   rectMode(CENTER);

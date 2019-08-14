@@ -5,10 +5,6 @@ class Mole {
   int moleWidth;
   boolean state;
   
-  //Timer gameTimer;
-  //Timer imageTimer;
-
-  //boolean timerStarted = false;
 
   // how long to stay in this currentMole
   int totalCurrentMoleTime;
