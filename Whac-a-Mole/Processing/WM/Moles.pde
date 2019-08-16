@@ -22,7 +22,7 @@ Mole(int x, int y, int w, int h ) {
 
 void drawMole() {
   if (state == false) {
-  fill(0,0,255);
+  fill(0);
   rect(xPos,yPos,moleWidth, moleHeight);
   } else {
   fill(255,0,0);

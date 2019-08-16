@@ -14,7 +14,7 @@ class Timer {
 
   boolean isFinished() {
     passedTime = (millis()/1000) - savedTime;
-    if (passedTime > totalTime) {
+    if (passedTime >= totalTime) {
       return true;
     } 
     else {
