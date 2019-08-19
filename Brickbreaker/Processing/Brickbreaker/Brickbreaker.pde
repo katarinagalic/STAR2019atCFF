@@ -2,25 +2,25 @@
 import processing.serial.*;
 
 Serial sp;                               // Serial port object
-Ball myBall;
-Block block;
+Ball myBall;                             // Ball object
+Block block;                             // Block object
 
 int lf = 10;                             // ASCII linefeed
 String delimiter = " ";                  // String delimiter
 String str;                              // Serial output string
 float[] data = new float[6];             // Serial data buffer
 float pos;                               // Paddle position
-float paddleX;
-int paddleY = 400;
+float paddleX;                           // x-coordinate of paddle center
+int paddleY = 400;                       // y-coordinate of paddle center
 int paddleWidth = 100;
 int paddleHeight = 10;
-float scale = 250.0;
+float scale = 250.0;                     // used to scale the position range 
 
-int lives = 5;
+int lives = 5;                           // life count
 
-public int p = 0;
+public int p = 0;                        // counter for the drawing of blocks
 
-Block[] blocks;
+Block[] blocks;                          //an array of block objects for the wall
 
 /*
  * Serial data from CTS slave device
@@ -32,19 +32,21 @@ Block[] blocks;
  */
 
 void setup() {
-  frameRate(100);
-  size(1000, 500); // Set the processing window size
-  //fullScreen();
+  frameRate(100);                        // Setting the frame rate
+  size(1000, 500);                       // Set the processing window size
+  
   
   sp = new Serial(this, "COM6", 115200); // Initialize the serial port to the current processing instance ("this") with an address of "COM4" (change this) and a baud rate of 115200 BPS
   sp.clear();                            // Clear/flush the serial port
   str = sp.readStringUntil(lf);          // Read and discard any malformed data in the serial buffer
-  str = null; // Clear the string
+  str = null;                            // Clear the string
 
-  myBall = new Ball();
+//instantiating a ball object
+  myBall = new Ball();                   
   myBall.ballX=width/2;
   myBall.ballY=height/2;
-  
+
+//setting up the block array
   int numBlocks=50;
   blocks = new Block[numBlocks];
   
@@ -69,12 +71,12 @@ void draw() {
     gameover();                          // Calls the gameover function
     myBall.keepInScreen();               // Bounces the ball off the game window edges
     paddleCollision();                   // Calls the collision function
-    blockCollision();
-    displayend();
-    printLives();
+    blockCollision();                    // Calls the collision function
+    displayend();                        // Calls Game over screen
+    printLives();                        // Calls life count function
     
   } 
-  } catch (ArrayIndexOutOfBoundsException e) {
+  } catch (ArrayIndexOutOfBoundsException e) { //deals with errors from serial port
     println("Caught it");
     draw();
   }
@@ -87,7 +89,7 @@ void paddle(float pos) {
   rect(paddleX=pos, paddleY, paddleWidth, paddleHeight, 5); // Draw a 100 x 10 pixel rectangle with a 5-pixel round at x = pos-50 and y = 400
 }
 
-void blockarray(){
+void blockarray(){ //creates 50 block objects and stores them in the block array 
   while (p<blocks.length){
     for (int i = 0; i<10; i++) {
       for (int j=0; j<5; j++) {
@@ -98,13 +100,14 @@ void blockarray(){
   }
 } //<>//
 
-void drawarray(){
+void drawarray(){ // draws each block in the array
   for (int i=0; i<blocks.length; i++){
     blocks[i].drawBlock();
   }
 }
 
-// Checks for collision between ball and paddle, makes ball bounce off paddle and deals with horizontal variance in bouncing
+// Checks for collision between ball and paddle, makes ball 
+// bounce off paddle and deals with horizontal variance in bouncing
 void paddleCollision(){ 
   if ((myBall.ballX+(myBall.ballSize/2) > paddleX-(paddleWidth/2)) && (myBall.ballX-(myBall.ballSize/2) < paddleX+(paddleWidth/2))) {
       if (dist(myBall.ballX, myBall.ballY, myBall.ballX, paddleY)<=(myBall.ballSize/2)) {
@@ -114,7 +117,8 @@ void paddleCollision(){
     }
 }
 
-//Checks for collision between ball and individual blocks, makes ball bounce off block bottom and deals with horizontal variance in bouncing
+// Checks for collision between ball and individual blocks, makes ball
+// bounce off block bottom and deals with horizontal variance in bouncing
 void blockCollision() {
   for (int i=0; i<blocks.length; i++){
     if (blocks[i].blockVisibility){
@@ -129,7 +133,7 @@ void blockCollision() {
   }
 }
 
-boolean counterfunct() {
+boolean counterfunct() { // checks how many blocks have been hit and returns true if all blocks are hit
   int counter = 0;
   for (int i=0; i<blocks.length; i++){
     if (blocks[i].blockVisibility == false) {
@@ -144,7 +148,7 @@ boolean counterfunct() {
   }
 }
 
-void displayend() {
+void displayend() { //displays game over, gets rid of ball and remaining blocks
   if ((counterfunct() == true) || (lives==0)) {
     myBall.ballVisibility = false;
     for (int i=0; i<blocks.length; i++){
@@ -167,7 +171,7 @@ void gameover() {
   }
 }
 
-void printLives(){
+void printLives(){ //prints life count
   textAlign(CENTER);
   fill(233,175,68);
   textSize(30); 

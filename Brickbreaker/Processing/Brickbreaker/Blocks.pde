@@ -15,7 +15,7 @@ class Block {
     
   }
   
-  
+  //draws the block
   void drawBlock() {
         if (blockVisibility == true) {
           fill(blockColor);

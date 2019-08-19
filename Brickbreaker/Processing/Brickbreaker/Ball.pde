@@ -8,7 +8,7 @@ class Ball {
 
   float gravity = 0.65;                    //Gravity constant
   float ballvy = 0;                        //Vertical speed
-  float ballvx = 3;                        //Horizontal speed 
+  float ballvx = 1;                        //Horizontal speed 
 
   boolean ballVisibility = true;
   //Constructor
