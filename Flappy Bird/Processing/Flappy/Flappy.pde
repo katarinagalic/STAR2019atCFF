@@ -8,7 +8,7 @@ int lf = 10;                             // ASCII linefeed
 String delimiter = " ";                  // String delimiter
 String str;                              // Serial output string
 float[] data = new float[6];             // Serial data buffer
-public float press;                      // Paddle position
+public float press;                      // Paddle pressure
 int paddleX = 500;
 float paddleY = height/2;
 int paddleWidth = 10;
@@ -16,7 +16,7 @@ int paddleHeight = 60;
 float scale = 10;
 
 float gravity = .981;                    //Gravity constant
-float paddlevy = 0; 
+float paddlevy = 0;                      //Paddle velocity  in Y
 int screenvalue = 0;
 
 
@@ -60,47 +60,47 @@ void draw() {
   }
   
   try {
-  if (str != null) {                     // If the string is not null ...
-    data = float(split(str, delimiter)); // Separate the string by the delimiter
-    press = data[5];                     // Save the position as the fourth element of the array
-    applyForces(-0.2*(.5*press-gravity));
-    drawpaddle(paddleY);                     // Draw the paddle in the center of the screen 
-    keepInScreen();
-    walls.wallAdder();
+  if (str != null) {                                                             // If the string is not null ...
+    data = float(split(str, delimiter));                                         // Separate the string by the delimiter
+    press = data[5];                                                             // Save the position as the fourth element of the array
+    applyForces(-0.2*(.5*press-gravity));                                        // allows paddle to move 
+    drawpaddle(paddleY);                                                         // Draw the paddle in the center of the screen 
+    keepInScreen();                                                              // keeps paddle in screen
+    walls.wallAdder();                                                           // adds walls as bird moves
     wallHandler();
-    walls.printScore();
+    walls.printScore();                                                          // prints score
   }
   } catch (ArrayIndexOutOfBoundsException e) {
-    println("Caught it");
+    println("Caught it");                                                        // prints caught it when flappy falls
     draw();
   }
 }
 
  //<>//
 // Paddle methods
-void drawpaddle(float press) {
+void drawpaddle(float press) {                                                   // draws paddle from center 
   fill(233,175,68);
-  noStroke();
+  noStroke();                           
   rectMode(CENTER);
   rect(paddleX, press, paddleWidth, paddleHeight, 5);
 }
 
-void applyForces(float num) {
+void applyForces(float num) {                                                    // changes paddle Y position based on paddle velocity
   paddlevy += num;
   paddleY += paddlevy;
 }
 
 //Keeps ball in the screen bounds
 void keepInScreen() {
- if ((paddleY+(paddleHeight/2) > height) || (paddleY-(paddleHeight/2) < 0)){ 
-    exit();
+ if ((paddleY+(paddleHeight/2) > height) || (paddleY-(paddleHeight/2) < 0)){     // if paddle leaves screen 
+    exit();                                                                      // exit program
   }
 }
-void wallHandler() {
-  for (int i = 0; i < walls.walls.size(); i++) {
-    walls.wallRemover(i);
-    walls.wallMover(i);
-    walls.wallDrawer(i);
-    walls.watchWallCollision(i, paddleX, paddleY, paddleWidth, paddleHeight);
+void wallHandler() {                                                             
+  for (int i = 0; i < walls.walls.size(); i++) {                                 
+    walls.wallRemover(i);                                                        //removes walls 
+    walls.wallMover(i);                                                          //moves walls horizontally at in -xdirection
+    walls.wallDrawer(i);                                                         //draws walls from top and bottom of different lengths
+    walls.watchWallCollision(i, paddleX, paddleY, paddleWidth, paddleHeight);    //watches for collision between Flappy and any walls; exits screen
   }
 }
