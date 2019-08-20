@@ -16,20 +16,20 @@ color wallColors = color(0);
 ArrayList<int[]> walls = new ArrayList<int[]>();
 
 
-void wallAdder() {
-  if (millis()-lastAddTime > wallInterval) {
-    int randHeight = round(random(minGapHeight, maxGapHeight));
-    int randY = round(random(0, height-randHeight));
+void wallAdder() {                                                                      //adds walls to wall[] to be drawn
+  if (millis()-lastAddTime > wallInterval) {                                            //walls appear at equal time intervals
+    int randHeight = round(random(minGapHeight, maxGapHeight));                         //finds random height between min&max height range
+    int randY = round(random(0, height-randHeight));                                    //sets height for wall
     // {gapWallX, gapWallY, gapWallWidth, gapWallHeight}
-    int[] randWall = {width, randY, wallWidth, randHeight, 0}; 
-    walls.add(randWall);
-    lastAddTime = millis();
+    int[] randWall = {width, randY, wallWidth, randHeight, 0};                           
+    walls.add(randWall);                                                                //adds randWall to list wall[]
+    lastAddTime = millis();                                                             //increments time that last wall was added
   }
 }
 
-void wallDrawer(int index) {
+void wallDrawer(int index) {                                                            //draws walls
   int[] wall = walls.get(index);
-  // get gap wall settings 
+  // get gap wall settings                                                              //sets gap wall w/ inputs from wall[] 
   int gapWallX = wall[0];
   int gapWallY = wall[1];
   int gapWallWidth = wall[2];
@@ -37,20 +37,20 @@ void wallDrawer(int index) {
   // draw actual walls
   rectMode(CORNER);
   fill(wallColors);
-  rect(gapWallX, 0, gapWallWidth, gapWallY);
-  rect(gapWallX, gapWallY+gapWallHeight, gapWallWidth, height-(gapWallY+gapWallHeight));
+  rect(gapWallX, 0, gapWallWidth, gapWallY);                                                    //draws first wall from top of screen
+  rect(gapWallX, gapWallY+gapWallHeight, gapWallWidth, height-(gapWallY+gapWallHeight));        //draws second wall from bottom of screen
 }
-void wallMover(int index) {
-  int[] wall = walls.get(index);
+void wallMover(int index) {                                                                     //moves walls across screen in -xdirection
+  int[] wall = walls.get(index);                                                                
   wall[0] -= wallSpeed;
 }
-void wallRemover(int index) {
+void wallRemover(int index) {                                                                   //removes walls from wall[]
   int[] wall = walls.get(index);
   if (wall[0]+wall[2] <= 0) {
     walls.remove(index);
   }
 }
-void watchWallCollision(int index, int paddleX, float paddleY, int paddleWidth, int paddleHeight ) {
+void watchWallCollision(int index, int paddleX, float paddleY, int paddleWidth, int paddleHeight ) {        //watches for collision between walls and paddle
   int[] wall = walls.get(index);
   // get gap wall settings 
   int gapWallX = wall[0];
@@ -66,8 +66,8 @@ void watchWallCollision(int index, int paddleX, float paddleY, int paddleWidth, 
   int wallBottomWidth = gapWallWidth;
   int wallBottomHeight = height-(gapWallY+gapWallHeight);
 
-  if (
-    (paddleX+(paddleWidth/2)>wallTopX) &&
+  if (                                                                                  //if paddle collides with upper wall -> exit window
+    (paddleX+(paddleWidth/2)>wallTopX) &&                                                     
     (paddleX-(paddleWidth/2)<wallTopX+wallTopWidth) &&
     (paddleY+(paddleHeight/2)>wallTopY) &&
     (paddleY-(paddleHeight/2)<wallTopY+wallTopHeight)
@@ -75,7 +75,7 @@ void watchWallCollision(int index, int paddleX, float paddleY, int paddleWidth, 
     exit();
   }
   
-  if (
+  if (                                                                                  //if paddle collides with lower wall -> exit window
     (paddleX+(paddleWidth/2)>wallBottomX) &&
     (paddleX-(paddleWidth/2)<wallBottomX+wallBottomWidth) &&
     (paddleY+(paddleHeight/2)>wallBottomY) &&
@@ -85,17 +85,17 @@ void watchWallCollision(int index, int paddleX, float paddleY, int paddleWidth, 
   }
   
   int wallScored = wall[4];
-  if (paddleX > gapWallX+(gapWallWidth/2) && wallScored==0) {
+  if (paddleX > gapWallX+(gapWallWidth/2) && wallScored==0) {                           //adds 1 to score if paddle successfully passes through walls
     wallScored=1;
     wall[4]=1;
     score();
   }
 }
-void score() {
+void score() {                                                                          //increments score by 1
   score++;
 }
 
-void printScore(){
+void printScore(){                                                                      //prints score while playing game
   textAlign(CENTER);
   fill(233,175,68);
   textSize(30); 
