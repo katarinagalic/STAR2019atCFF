@@ -57,6 +57,7 @@ void draw() {
     str = sp.readStringUntil(lf);        // Write the string 
   }
   
+  try {
   if (str != null) {                     // If the string is not null ...
     data = float(split(str, delimiter)); // Separate the string by the delimiter
     press = data[4];                     // Get button number
@@ -72,8 +73,11 @@ void draw() {
   checkHit();
   endGame();
   printTime();
-  
-}
+  }
+} catch (ArrayIndexOutOfBoundsException e) {
+    println("Caught it");                                                        // prints caught it when flappy falls
+    draw();
+  }
 } //<>//
 
 void drawMoles() {
@@ -91,25 +95,25 @@ void drawMoles() {
 void checkHit() {
   if (hp > 60) {
     if ((press>-0.8) && (press<-0.69)) {
-      moleslist[0].state = false; 
+      changeState(0);  
     }
      if ((press>-.55) && (press<-0.45)) {
-      moleslist[1].state = false; 
+      changeState(1);  
     }
     if ((press>-0.35) && (press<-0.25)) {
-      moleslist[2].state = false; 
+      changeState(2);  
     }
     if ((press>-.20) && (press<-0.05)) {
-      moleslist[3].state = false; 
+      changeState(3); 
     }
     if ((press>0.0) && (press<.20)) {
-      moleslist[4].state = false; 
+      changeState(4);  
     }
     if ((press>.25) && (press<.35)) {
-      moleslist[5].state = false; 
+      changeState(5);  
     }
     if ((press>.40) && (press<.5)) {
-      moleslist[6].state = false; 
+      changeState(6); 
     }
 }
 }
@@ -119,10 +123,15 @@ if (timer.isFinished() == true) {
   exit();
 }
 } 
-
+void changeState(int num) {
+  if (moleslist[num].state == true) {
+    moleslist[num].state = false;
+    score++; }
+}
 void printTime() {
   textAlign(CENTER);
   fill(0);
   textSize(18); 
   text("Time left: "+ str(timer.totalTime - timer.passedTime), 65, 30);
+  text("Score: "+str(score),65,50);
 }
