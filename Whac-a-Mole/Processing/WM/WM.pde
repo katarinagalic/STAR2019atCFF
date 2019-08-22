@@ -15,13 +15,15 @@ public float press;                               // Paddle position
 float scale = 10;
 int waitFrames = 100;
 int score = 0;
+float hp;
 
-int moleHeight = 100;
-int moleWidth = 70;
-int xCoord[] = {45, 115, 185, 255, 325, 395, 465, 535, 605, 675, 745, 815, 885};
-int yCoord[] = {350, 250, 150, 50};
+int moleHeight = 80;
+int moleWidth = 80;
+int xCoord[] = {190, 280, 370, 460, 550, 640, 730};
+int yCoord[] = {100,210,320};
 
-Mole[] moleslist = new Mole[13];
+Mole[] moleslist = new Mole[7];
+
 
 //functions 
 
@@ -37,16 +39,11 @@ void setup() {
    moleslist[0] = new Mole(xCoord[0], yCoord[0], moleWidth, moleHeight); 
    moleslist[1] = new Mole(xCoord[1], yCoord[1], moleWidth, moleHeight);
    moleslist[2] = new Mole(xCoord[2], yCoord[2], moleWidth, moleHeight);
-   moleslist[3] = new Mole(xCoord[3], yCoord[3], moleWidth, moleHeight);
-   moleslist[4] = new Mole(xCoord[4], yCoord[2], moleWidth, moleHeight);
+   moleslist[3] = new Mole(xCoord[3], yCoord[1], moleWidth, moleHeight);
+   moleslist[4] = new Mole(xCoord[4], yCoord[0], moleWidth, moleHeight);
    moleslist[5] = new Mole(xCoord[5], yCoord[1], moleWidth, moleHeight);
-   moleslist[6] = new Mole(xCoord[6], yCoord[0], moleWidth, moleHeight);
-   moleslist[7] = new Mole(xCoord[7], yCoord[1], moleWidth, moleHeight);
-   moleslist[8] = new Mole(xCoord[8], yCoord[2], moleWidth, moleHeight);
-   moleslist[9] = new Mole(xCoord[9], yCoord[3], moleWidth, moleHeight);
-   moleslist[10] = new Mole(xCoord[10], yCoord[2], moleWidth, moleHeight);
-   moleslist[11] = new Mole(xCoord[11], yCoord[1], moleWidth, moleHeight);
-   moleslist[12] = new Mole(xCoord[12], yCoord[0], moleWidth, moleHeight);
+   moleslist[6] = new Mole(xCoord[6], yCoord[2], moleWidth, moleHeight);
+
   
   //initiating the timer
   timer = new Timer(45);
@@ -62,10 +59,13 @@ void draw() {
   
   if (str != null) {                     // If the string is not null ...
     data = float(split(str, delimiter)); // Separate the string by the delimiter
-    press = data[4];                     // Get button number 
+    press = data[4];                     // Get button number
+    hp= data[1];
+    
+    
   if (frameCount % waitFrames == 0) {
     waitFrames--;
-    int rand = (int) random (0,13);
+    int rand = (int) random (0,7);
   moleslist[rand].state = !moleslist[rand].state; }
   
   drawMoles();
@@ -89,9 +89,29 @@ void drawMoles() {
 //}
 
 void checkHit() {
-    if ((press>1.2) && (press<1.4)) {
+  if (hp > 60) {
+    if ((press>-0.8) && (press<-0.69)) {
       moleslist[0].state = false; 
     }
+     if ((press>-.55) && (press<-0.45)) {
+      moleslist[1].state = false; 
+    }
+    if ((press>-0.35) && (press<-0.25)) {
+      moleslist[2].state = false; 
+    }
+    if ((press>-.20) && (press<-0.05)) {
+      moleslist[3].state = false; 
+    }
+    if ((press>0.0) && (press<.20)) {
+      moleslist[4].state = false; 
+    }
+    if ((press>.25) && (press<.35)) {
+      moleslist[5].state = false; 
+    }
+    if ((press>.40) && (press<.5)) {
+      moleslist[6].state = false; 
+    }
+}
 }
 
 void endGame() {

@@ -1,4 +1,3 @@
-
 import processing.serial.*;
 
 Serial sp;                               // Serial port object
