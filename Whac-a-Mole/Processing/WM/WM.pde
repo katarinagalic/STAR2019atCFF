@@ -1,5 +1,7 @@
 import processing.sound.*; //<>//
 import processing.serial.*;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
 
 //variables
 
@@ -7,16 +9,23 @@ Serial sp;                               // Serial port object
 Mole moles;
 Timer timer;
 SoundFile tone;
+PrintWriter out;
+BufferedReader reader;
+String currentHigh;
 
 int lf = 10;                             // ASCII linefeed
 String delimiter = " ";                  // String delimiter
 String str;                              // Serial output string
 float[] data = new float[6];             // Serial data buffer
-public float press;                               // Paddle position
+public float press;                      // Paddle position
 float scale = 10;
 int waitFrames = 100;
 int score = 0;
 float hp;
+float avg;
+float sum;
+String line;
+String newline;
 
 int moleHeight = 80;
 int moleWidth = 80;
@@ -51,6 +60,15 @@ void setup() {
   timer.startTimer();
   
   tone = new SoundFile(this, "whack.mp3");
+  
+    try {
+    File f = dataFile("test.txt");    
+    out = new PrintWriter(new BufferedWriter(new FileWriter(f, true)));    
+  }
+  catch (IOException e) { 
+    println(e);
+  }
+  reader = createReader("test.txt");
 }
 
 void draw() {
@@ -74,8 +92,10 @@ void draw() {
   
   drawMoles();
   checkHit();
-  endGame();
   printTime();
+  //println(printavg());
+  determineHighScore();
+  endGame();
   }
 } catch (ArrayIndexOutOfBoundsException e) {
     println("Caught it");                                                        // prints caught it when flappy falls
@@ -89,15 +109,11 @@ void drawMoles() {
   }
 }
 
-//void mousePressed() {
-//  int rand = (int) random (0,13);
-//  moleslist[rand].state = !moleslist[rand].state;
-  
-//}
-
 void checkHit() {
-  if (hp > 60) {
-    if ((press>-0.8) && (press<-0.69)) {
+
+  if (hp > 63) {
+
+    if ((press>-0.8) && (press<-0.60)) {
       changeState(0);  
     }
      if ((press>-.55) && (press<-0.45)) {
@@ -109,13 +125,13 @@ void checkHit() {
     if ((press>-.20) && (press<-0.05)) {
       changeState(3); 
     }
-    if ((press>0.0) && (press<.20)) {
+    if ((press>0.0) && (press<.15)) {
       changeState(4);  
     }
-    if ((press>.25) && (press<.35)) {
+    if ((press>.18) && (press<.33)) {
       changeState(5);  
     }
-    if ((press>.40) && (press<.5)) {
+    if ((press>.35) && (press<.5)) {
       changeState(6); 
     }
 }
@@ -123,6 +139,12 @@ void checkHit() {
 
 void endGame() {
 if (timer.isFinished() == true) {
+  out.println(str(score));
+  text("High score: "+currentHigh,65,70);
+  out.flush();
+  out.flush();
+  out.flush();
+  out.close();
   exit();
 }
 } 
@@ -139,4 +161,35 @@ void printTime() {
   textSize(18); 
   text("Time left: "+ str(timer.totalTime - timer.passedTime), 65, 30);
   text("Score: "+str(score),65,50);
+  
+}
+
+float printavg() {
+  sum=0;
+  if (frameCount %60==0) {
+    for (int i=0; i<100; i++){
+      sum+=press;
+    }
+   avg = sum/100;
+  }
+  return avg;
+}
+void determineHighScore() {
+  try {
+  line = reader.readLine();
+  if (line != null) {
+  currentHigh = line;
+  while (line != null) {
+    newline = reader.readLine();
+    if (newline != null) {
+      if (int(newline) > int(currentHigh)) {
+        currentHigh = newline;
+      } 
+    }
+    line=newline;
+  } 
+  }
+  }catch (IOException e) {
+    println(e);
+  }
 }
