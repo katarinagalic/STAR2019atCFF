@@ -1,4 +1,4 @@
-
+import processing.sound.*; //<>//
 import processing.serial.*;
 
 //variables
@@ -6,6 +6,7 @@ import processing.serial.*;
 Serial sp;                               // Serial port object
 Mole moles;
 Timer timer;
+SoundFile tone;
 
 int lf = 10;                             // ASCII linefeed
 String delimiter = " ";                  // String delimiter
@@ -48,6 +49,8 @@ void setup() {
   //initiating the timer
   timer = new Timer(45);
   timer.startTimer();
+  
+  tone = new SoundFile(this, "whack.mp3");
 }
 
 void draw() {
@@ -78,7 +81,7 @@ void draw() {
     println("Caught it");                                                        // prints caught it when flappy falls
     draw();
   }
-} //<>//
+}
 
 void drawMoles() {
   for (int i=0; i<moleslist.length; i++){
@@ -126,6 +129,8 @@ if (timer.isFinished() == true) {
 void changeState(int num) {
   if (moleslist[num].state == true) {
     moleslist[num].state = false;
+    moleslist[num].validate();
+    tone.play();
     score++; }
 }
 void printTime() {

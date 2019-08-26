@@ -1,3 +1,5 @@
+
+
 class Mole {
   int xPos;
   int yPos;
@@ -28,6 +30,11 @@ void drawMole() {
   fill(255,0,0);
   rect(xPos,yPos,moleWidth, moleHeight); }
   
+}
+
+void validate() {
+  fill(0,255,0);
+  rect(xPos, yPos, moleWidth, moleHeight);
 }
 
 
