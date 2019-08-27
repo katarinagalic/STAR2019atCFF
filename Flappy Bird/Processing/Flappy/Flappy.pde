@@ -16,7 +16,7 @@ float scale = 10;
 
 float gravity = .981;                    //Gravity constant
 float paddlevy = 0;                      //Paddle velocity  in Y
-int screenvalue = 0;
+public int screenvalue = 0;
 
 
 /*
@@ -54,6 +54,7 @@ void setup() {
 
 void draw() {
   background(230);                       // Render the background at 90% gray (clears the window)
+  if (screenvalue == 0) {
   while (sp.available() > 0) {           // Read while the serial port contains data
     str = sp.readStringUntil(lf);        // Write the string 
   }
@@ -62,7 +63,7 @@ void draw() {
   if (str != null) {                                                             // If the string is not null ...
     data = float(split(str, delimiter));                                         // Separate the string by the delimiter
     press = data[5];                                                             // Save the position as the fourth element of the array
-    applyForces(-0.2*(.5*press-gravity));                                        // allows paddle to move 
+    applyForces(-0.25*(.1*press-gravity));                                        // allows paddle to move 
     drawpaddle(paddleY);                                                         // Draw the paddle in the center of the screen 
     keepInScreen();                                                              // keeps paddle in screen
     walls.wallAdder();                                                           // adds walls as bird moves
@@ -73,8 +74,22 @@ void draw() {
     println("Caught it");                                                        // prints caught it when flappy falls
     draw();
   }
+  } else if (screenvalue == 1) {
+    textAlign(CENTER);
+    fill(233,175,68);
+    textSize(30); 
+    text("Game over", width/2, height/2-100);
+    text("Score: "+str(walls.score), width/2, height/2-50);
+    fill(0);
+    rectMode(CENTER);
+    rect(width/2, height/2, 200, 80);
+    fill(233,175,68);
+    textAlign(CENTER);
+    text("Exit game", width/2, height/2);
+    exitGame();
+    }
 }
-
+    
  //<>//
 // Paddle methods
 void drawpaddle(float press) {                                                   // draws paddle from center 
@@ -92,7 +107,7 @@ void applyForces(float num) {                                                   
 //Keeps ball in the screen bounds
 void keepInScreen() {
  if ((paddleY+(paddleHeight/2) > height) || (paddleY-(paddleHeight/2) < 0)){     // if paddle leaves screen 
-    exit();                                                                      // exit program
+    screenvalue=1;                                                                      // exit program
   }
 }
 void wallHandler() {                                                             
@@ -103,3 +118,10 @@ void wallHandler() {
     walls.watchWallCollision(i, paddleX, paddleY, paddleWidth, paddleHeight);    //watches for collision between Flappy and any walls; exits screen
   }
 }
+
+void exitGame() {
+  if ((mouseX > (width/2-100)) && (mouseX < (width/2+100)) && 
+  (mouseY > (height/2-40)) && (mouseY < (height/2+40)) && mousePressed) {
+    exit();
+  }}
+  

@@ -93,7 +93,7 @@ void draw() {
   drawMoles();
   checkHit();
   printTime();
-  //println(printavg());
+  println(printavg());
   determineHighScore();
   endGame();
   }
@@ -111,7 +111,7 @@ void drawMoles() {
 
 void checkHit() {
 
-  if (hp > 63) {
+  if (hp > 60) {
 
     if ((press>-0.8) && (press<-0.60)) {
       changeState(0);  

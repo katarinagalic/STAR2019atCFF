@@ -72,7 +72,8 @@ void watchWallCollision(int index, int paddleX, float paddleY, int paddleWidth, 
     (paddleY+(paddleHeight/2)>wallTopY) &&
     (paddleY-(paddleHeight/2)<wallTopY+wallTopHeight)
     ) {
-    exit();
+    screenvalue = 1;
+    
   }
   
   if (                                                                                  //if paddle collides with lower wall -> exit window
@@ -81,7 +82,7 @@ void watchWallCollision(int index, int paddleX, float paddleY, int paddleWidth, 
     (paddleY+(paddleHeight/2)>wallBottomY) &&
     (paddleY-(paddleHeight/2)<wallBottomY+wallBottomHeight)
     ) {
-    exit();
+    screenvalue = 1;
   }
   
   int wallScored = wall[4];

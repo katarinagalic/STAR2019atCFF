@@ -14,7 +14,7 @@ float paddleX;                           // x-coordinate of paddle center
 int paddleY = 400;                       // y-coordinate of paddle center
 int paddleWidth = 100;
 int paddleHeight = 10;
-float scale = 250.0;                     // used to scale the position range 
+float scale = 300.0;                     // used to scale the position range 
 
 int lives = 5;                           // life count
 
