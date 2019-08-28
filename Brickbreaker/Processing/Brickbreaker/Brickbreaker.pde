@@ -14,9 +14,10 @@ float paddleX;                           // x-coordinate of paddle center
 int paddleY = 400;                       // y-coordinate of paddle center
 int paddleWidth = 100;
 int paddleHeight = 10;
-float scale = 300.0;                     // used to scale the position range 
+float scale = 300.0;                     // used to scale the position range
+int bricksbroke = 0;
 
-int lives = 5;                           // life count
+int lives = 10;                           // life count
 
 public int p = 0;                        // counter for the drawing of blocks
 
@@ -36,7 +37,7 @@ void setup() {
   size(1000, 500);                       // Set the processing window size
   
   
-  sp = new Serial(this, "COM6", 115200); // Initialize the serial port to the current processing instance ("this") with an address of "COM4" (change this) and a baud rate of 115200 BPS
+  sp = new Serial(this, "/dev/cu.usbmodem123451", 115200); // Initialize the serial port to the current processing instance ("this") with an address of "COM4" (change this) and a baud rate of 115200 BPS
   sp.clear();                            // Clear/flush the serial port
   str = sp.readStringUntil(lf);          // Read and discard any malformed data in the serial buffer
   str = null;                            // Clear the string
@@ -98,7 +99,7 @@ void blockarray(){ //creates 50 block objects and stores them in the block array
       }
     }
   }
-} //<>//
+} //<>// //<>//
 
 void drawarray(){ // draws each block in the array
   for (int i=0; i<blocks.length; i++){
@@ -112,7 +113,7 @@ void paddleCollision(){
   if ((myBall.ballX+(myBall.ballSize/2) > paddleX-(paddleWidth/2)) && (myBall.ballX-(myBall.ballSize/2) < paddleX+(paddleWidth/2))) {
       if (dist(myBall.ballX, myBall.ballY, myBall.ballX, paddleY)<=(myBall.ballSize/2)) {
         myBall.makeBounceBottom(paddleY);
-        myBall.ballvx = (myBall.ballX - paddleX)/15;
+        myBall.ballvx = (myBall.ballX - paddleX)/5;
       }
     }
 }
@@ -126,7 +127,8 @@ void blockCollision() {
           if (dist(myBall.ballX, myBall.ballY, myBall.ballX, blocks[i].blockY)<=(myBall.ballSize)) {
             blocks[i].blockVisibility = false;
             myBall.makeBounceTop(blocks[i].blockY+20);
-            myBall.ballvx = (myBall.ballX - blocks[i].blockX)/15;
+            myBall.ballvx = (myBall.ballX - blocks[i].blockX)/10;
+            bricksbroke ++;
         }
       }
     }
@@ -157,6 +159,7 @@ void displayend() { //displays game over, gets rid of ball and remaining blocks
     fill(233,175,68);
     textSize(30); 
     text("Game over", width/2, height/2);
+    text("Bricks Broken: " + (bricksbroke), width/2, height/3);
   }  
 }
 //Returns the ball back to top if it hits the bottom
@@ -164,7 +167,7 @@ void gameover() {
   if (myBall.ballY + myBall.ballSize/2 > 498){
     myBall.ballX=width/2;
     myBall.ballY=height/5;
-    myBall.ballvy = 0;
+    myBall.ballvy = 10;
     myBall.ballvx = 1;
     if (lives >= 1) {
     lives -=1; }
@@ -176,4 +179,5 @@ void printLives(){ //prints life count
   fill(233,175,68);
   textSize(30); 
   text("Lives: "+str(lives), width*0.9, height*0.9);
+  
 }

@@ -11,6 +11,7 @@ int minGapHeight = 200;
 int maxGapHeight = 300;
 int wallWidth = 80;
 color wallColors = color(0);
+
 // This arraylist stores data of the gaps between the walls. Actuals walls are drawn accordingly.
 // [gapWallX, gapWallY, gapWallWidth, gapWallHeight]
 ArrayList<int[]> walls = new ArrayList<int[]>();
