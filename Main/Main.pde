@@ -1,7 +1,7 @@
 // Code for the cts game controller
 import processing.core.PApplet;
 
-//var definitions 
+//var definitions
 
 public int screenval = 0;
 
@@ -10,20 +10,20 @@ Whack whack;
 public Serial sp;
 public int lf = 10;                             // ASCII linefeed
 public String delimiter = " ";                  // String delimiter
-public String str; 
+public String str;
 public float[] data = new float[6];
 
 
 void setup() {
   size(1000,500);
   //fullScreen();
-  
+
   sp = new Serial(this, "COM6", 115200); // Initialize the serial port to the current processing instance ("this") with an address of "COM4" (change this) and a baud rate of 115200 BPS
   sp.clear();                            // Clear/flush the serial port
   str = sp.readStringUntil(10);          // Read and discard any malformed data in the serial buffer
-  str = null; 
-  
-  flappy = new Flappy(); 
+  str = null;
+
+  flappy = new Flappy();
   whack = new Whack();
 }
 
@@ -50,7 +50,7 @@ void startScreen() {
   background(230, 0, 66);
   textAlign(CENTER);
   textSize(26);
-  
+
   text("Pick a game to start", width/2, height/2);
   rectMode(CENTER);
   rect(width*0.25, (height*0.65), 100, 100, 7); //100

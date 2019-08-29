@@ -6,8 +6,8 @@ class Ball {
   int ballSize = 30;                       //Ball diameter
   int ballColor = color(0);                //Ball color
 
-  float gravity = 0.4;                    //Gravity constant
-  float ballvy = 0;                        //Vertical speed
+  float gravity = 0.0;                    //Gravity constant
+  float ballvy = 3;                        //Vertical speed
   float ballvx = 1;                        //Horizontal speed 
 
   boolean ballVisibility = true;
@@ -34,19 +34,19 @@ class Ball {
   //Bounce functions
   void makeBounceBottom(int surface) {
     ballY = surface-(ballSize/2);
-    ballvy*= -1;
+    ballvy *= -1.0;
   }
   void makeBounceTop(int surface) {
     ballY = surface+(ballSize/2);
-    ballvy*=-.1;
+    ballvy *= -1.0 ;
   }
   void makeBounceLeft(int surface) {  
     ballX = surface+(ballSize/2);
-    ballvx*=-.25;
+    ballvx *= -1.0;
   } 
   void makeBounceRight(int surface) {
     ballX = surface-(ballSize/2);
-    ballvx*=-.5; 
+    ballvx *= -1.0; 
   }
 
   //Keeps ball in the screen bounds

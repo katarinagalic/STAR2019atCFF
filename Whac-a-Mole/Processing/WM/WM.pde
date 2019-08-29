@@ -36,11 +36,16 @@ int yCoord[] = {100,210,320};
 //list of mole objects
 Mole[] moleslist = new Mole[7];
 
+float threshold_min = -1.0;
+float threshold_max = 1.0;
+float[] threshold = new float[moleslist.length+1];
+
+
 
 void setup() {
-  size(1000, 500); // Set the processing window size
+  size(960, 1000); // Set the processing window size
   
-  sp = new Serial(this, "COM6", 115200); // Initialize the serial port to the current processing instance ("this") with an address of "COM4" (change this) and a baud rate of 115200 BPS
+  sp = new Serial(this, "COM4", 115200); // Initialize the serial port to the current processing instance ("this") with an address of "COM4" (change this) and a baud rate of 115200 BPS
   sp.clear();                            // Clear/flush the serial port
   str = sp.readStringUntil(lf);          // Read and discard any malformed data in the serial buffer
   str = null;                            // Clear the string
@@ -54,13 +59,19 @@ void setup() {
    moleslist[5] = new Mole(xCoord[5], yCoord[1], moleWidth, moleHeight);
    moleslist[6] = new Mole(xCoord[6], yCoord[2], moleWidth, moleHeight);
 
+  for (int i = 0; i < threshold.length; i++) {
+    threshold[i] = map(i, 0, threshold.length-1, threshold_min, threshold_max);
+  }
+  threshold[0] = Float.NEGATIVE_INFINITY;
+  threshold[threshold.length-1] = Float.POSITIVE_INFINITY;
+
   
   //instantiating the timer
   timer = new Timer(45);
   timer.startTimer();
   
   //instantiating the sound effect
-  tone = new SoundFile(this, "whack.mp3");
+  //tone = new SoundFile(this, "whack.mp3");
   
   //instantiating writer and reader
     try {
@@ -117,28 +128,12 @@ void drawMoles() {
 //checks if the mole has been hit based off of the range of average readings
 void checkHit() {
   if (filter > 60) { //filter of raw readings
-    if ((press>-0.8) && (press<-0.6)) {
-      changeState(0);  
+    for (int i = 0; i < moleslist.length; i++) {
+      if ((press > threshold[i]) && (press < threshold[i+1])) {
+        changeState(i);
+      }
     }
-     if ((press>-0.55) && (press<-0.45)) {
-      changeState(1);  
-    }
-    if ((press>-0.35) && (press<-0.25)) {
-      changeState(2);  
-    }
-    if ((press>-0.20) && (press<-0.05)) {
-      changeState(3); 
-    }
-    if ((press>0.0) && (press<0.15)) {
-      changeState(4);  
-    }
-    if ((press>0.18) && (press<0.33)) {
-      changeState(5);  
-    }
-    if ((press>0.35) && (press<0.5)) {
-      changeState(6); 
-    }
-}
+  }
 }
 
 //end of the game function
@@ -159,7 +154,7 @@ void changeState(int num) {
   if (moleslist[num].state == true) {
     moleslist[num].state = false;
     moleslist[num].validate();
-    tone.play();
+    //tone.play();
     score++; }
 }
 

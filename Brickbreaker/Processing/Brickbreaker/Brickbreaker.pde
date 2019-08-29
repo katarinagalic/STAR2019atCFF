@@ -11,7 +11,7 @@ String str;                              // Serial output string
 float[] data = new float[6];             // Serial data buffer
 float pos;                               // Paddle position
 float paddleX;                           // x-coordinate of paddle center
-int paddleY = 400;                       // y-coordinate of paddle center
+int paddleY = 950;                       // y-coordinate of paddle center
 int paddleWidth = 100;
 int paddleHeight = 10;
 float scale = 300.0;                     // used to scale the position range
@@ -34,10 +34,10 @@ Block[] blocks;                          //an array of block objects for the wal
 
 void setup() {
   frameRate(100);                        // Setting the frame rate
-  size(1000, 500);                       // Set the processing window size
+  size(960, 1000);                       // Set the processing window size
   
   
-  sp = new Serial(this, "/dev/cu.usbmodem123451", 115200); // Initialize the serial port to the current processing instance ("this") with an address of "COM4" (change this) and a baud rate of 115200 BPS
+  sp = new Serial(this, "COM4", 115200); // Initialize the serial port to the current processing instance ("this") with an address of "COM4" (change this) and a baud rate of 115200 BPS
   sp.clear();                            // Clear/flush the serial port
   str = sp.readStringUntil(lf);          // Read and discard any malformed data in the serial buffer
   str = null;                            // Clear the string
@@ -83,10 +83,20 @@ void draw() {
   }
 }
 
+void restart() {
+  for (Block block:blocks) {
+    block.blockVisibility = true;
+  }
+  
+}
+
+
 // Method to draw the paddle
 void paddle(float pos) {
   fill(255,0,125);
   rectMode(CENTER);
+  pos = (pos < 0)? 0 : pos;
+  pos = (pos > width)? width : pos;
   rect(paddleX=pos, paddleY, paddleWidth, paddleHeight, 5); // Draw a 100 x 10 pixel rectangle with a 5-pixel round at x = pos-50 and y = 400
 }
 
@@ -164,10 +174,10 @@ void displayend() { //displays game over, gets rid of ball and remaining blocks
 }
 //Returns the ball back to top if it hits the bottom
 void gameover() {
-  if (myBall.ballY + myBall.ballSize/2 > 498){
+  if (myBall.ballY + myBall.ballSize/2 > height-2){
     myBall.ballX=width/2;
     myBall.ballY=height/5;
-    myBall.ballvy = 10;
+    myBall.ballvy = 3;
     myBall.ballvx = 1;
     if (lives >= 1) {
     lives -=1; }
