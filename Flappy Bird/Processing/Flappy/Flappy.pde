@@ -41,7 +41,7 @@ public int screenvalue = 0;              // Screen value; 0 for game and changed
  */
 
 void setup() {
-  size(1000, 500);                       // Set the processing window size
+  size(960, 1000);                       // Set the processing window size
   
   sp = new Serial(this, "COM4", 115200); // Initialize the serial port to the current processing instance ("this") with an address of "COM4" (change this) and a baud rate of 115200 BPS
   sp.clear();                            // Clear/flush the serial port
@@ -119,8 +119,11 @@ void wallHandler() {
 }
 // exits the game if exit button is pressed
 void exitGame() {
-  if ((mouseX > (width/2-100)) && (mouseX < (width/2+100)) && 
-  (mouseY > (height/2-40)) && (mouseY < (height/2+40)) && mousePressed) {
-    exit();
-  }}
+  if (mousePressed) {
+    if ((mouseX > (width/2-100)) && (mouseX < (width/2+100)) && 
+    (mouseY > (height/2-40)) && (mouseY < (height/2+40))) {
+      exit();
+    }
+  }
+}
   
